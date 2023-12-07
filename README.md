@@ -20,6 +20,7 @@ Este projeto utiliza como base a aplicação [Giropops-Senhas](https://github.co
 - [Cert-Manager](https://cert-manager.io/docs/installation/kubernetes/)
 - [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
 - [Locust](https://locust.io/)
+- [yamlint](https://yamllint.readthedocs.io/en/stable/index.html)
 
 ## Imagem Docker
 
@@ -64,13 +65,11 @@ kubectl wait --namespace ingress-nginx \
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
 ```
 
-4. Instale o KubeLinter e verifique se os manifestos estão corretos
+4. Instale o yamllint e verifique se os manifestos estão corretos
 
 ```bash
-curl -LO https://github.com/stackrox/kube-linter/releases/download/v0.6.5/kube-linter-linux
-sudo mv kube-linter-linux /usr/local/bin/kube-linter
-sudo chmod +x /usr/local/bin/kube-linter
-kube-linter lint manifests/
+sudo apt-get install yamllint
+yamllint manifests/
 ```
 
 4. Crie o Issuer de staging e o ClusterIssuer de produção
