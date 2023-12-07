@@ -24,13 +24,21 @@ Este projeto utiliza como base a aplicação [Giropops-Senhas](https://github.co
 
 ## Imagem Docker
 
-A imagem foi construída utilizando utilizando como base as imagens [Python da Chainguard](https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/), que já possuem as melhores práticas de segurança implementadas. Utilizando a técnica de [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/) para reduzir o tamanho da imagem final e garantir que a imagem final não possua nenhuma vulnerabilidade.
+A imagem foi construída utilizando como base as imagens [Python da Chainguard](https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/), que já possuem as melhores práticas de segurança implementadas. Utilizando a técnica de [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/) para reduzir o tamanho da imagem final e garantir que a imagem final não possua nenhuma vulnerabilidade.
+
+Você pode buildar a imagem utilizando os arquivos na pasta 'giropops-senhas'. Dentro dessa estão os arquivos Dockerfile, o requirements.txt e todos os arquivos necessários para a aplicação funcionar.
+
+```bash
+cd giropops-senhas
+docker build -t raphaelborges/linuxtips-giropops-senhas:1.3 .
+```
 
 A imagem atualizada pode ser encontrada no [Docker Hub](https://hub.docker.com/repository/docker/raphaelborges/linuxtips-giropops-senhas/)
 
 Para verificar se a imagem possui alguma vulnerabilidade, utilize o [Trivy](https://aquasecurity.github.io/trivy/v0.47/getting-started/installation/)
 
 ```bash
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.47.0
 trivy image raphaelborges/linuxtips-giropops-senhas:1.3
 ```
 
