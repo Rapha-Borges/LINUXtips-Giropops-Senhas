@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -10,51 +11,23 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   rules:
-  - host: giropops.com.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: giropops-svc
-            port:
-              number: 5000
-  - host: locust.giropops.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: locust-giropops
-            port:
-              number: 80
-# spec:
-#   rules:
-#   - http:
-#       paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: giropops-svc
-#             port:
-#               number: 5000
-# spec:
-#   ingressClassName: nginx
-#   tls:
-#   - hosts:
-#       - giropops.com.local
-#     secretName: giropops-senhas-tls
-#   rules:
-#   - host: giropops.com.local
-#   - http:
-#       paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: giropops-svc
-#             port:
-#               number: 5000
+    - host: giropops.com.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: giropops-svc
+                port:
+                  number: 5000
+    - host: locust.giropops.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: locust-giropops
+                port:
+                  number: 80

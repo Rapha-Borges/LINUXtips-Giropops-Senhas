@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,18 +17,18 @@ spec:
         app: redis
     spec:
       containers:
-      - image: cgr.dev/chainguard/redis@sha256:5e036c79c5c64508501a43a9f0915d0dacb4b7018655f89359e3d426bcf64613
-        name: redis
-        ports:
-        - containerPort: 6379
-        imagePullPolicy: Always
-        resources:
-          limits:
-            cpu: 100m
-            memory: 128Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
+        - image: cgr.dev/chainguard/redis:latest
+          name: redis
+          ports:
+            - containerPort: 6379
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true

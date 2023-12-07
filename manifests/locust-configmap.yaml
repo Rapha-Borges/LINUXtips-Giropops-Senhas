@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 data:
   locustfile.py: |-
@@ -8,8 +9,14 @@ data:
 
         @task(1)
         def gerar_senha(self):
-            self.client.post("/api/gerar-senha", json={"tamanho": 8, "incluir_numeros": True, "incluir_caracteres_especiais": True})
-
+            self.client.post(
+                "/api/gerar-senha",
+                json={
+                    "tamanho": 8,
+                    "incluir_numeros": True,
+                    "incluir_caracteres_especiais": True
+                }
+            )
 
         @task(2)
         def listar_senha(self):
