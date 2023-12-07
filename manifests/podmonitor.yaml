@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
-  name: giropops-senhas-service-monitor
+  name: giropops-pod-monitor
   labels:
     app: giropops-senhas
   namespace: giropops-senhas
@@ -12,7 +12,7 @@ spec:
   selector:
     matchLabels:
       app: giropops-senhas
-  endpoints:
+  podMetricsEndpoints:
   - interval: 30s
     path: /metrics
     targetPort: 5000

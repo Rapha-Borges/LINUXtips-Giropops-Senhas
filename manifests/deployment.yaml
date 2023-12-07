@@ -7,7 +7,7 @@ metadata:
   namespace: giropops-senhas
 spec:
   strategy:
-    type: RollingUpdate # TODO - Revisar os tipos de estratégia
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 1 # TODO - Revisar o número de pods que podem ser criados a mais
       maxUnavailable: 1 # TODO - Revisar o número de pods que podem ficar indisponíveis
