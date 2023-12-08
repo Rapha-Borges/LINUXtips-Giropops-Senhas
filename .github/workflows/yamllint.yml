@@ -13,4 +13,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Validate YAML file
         run: |
-          yamllint manifests/
+          if yamllint manifests/; then
+            echo "No errors found in the YAML file."
+          else
+            echo "Error(s) found in the YAML file."
+            exit 1
+          fi
