@@ -33,7 +33,7 @@ cd giropops-senhas
 docker build -t raphaelborges/linuxtips-giropops-senhas:1.3 .
 ```
 
-A imagem atualizada pode ser encontrada no [Docker Hub](https://hub.docker.com/repository/docker/raphaelborges/linuxtips-giropops-senhas/)
+Porém toda alteração no código fonte da aplicação irá gerar uma nova imagem, que será feito o build e enviada automaticamente para o Docker Hub através do GitHub Actions. A imagem atualizada pode ser encontrada no [Docker Hub](https://hub.docker.com/repository/docker/raphaelborges/linuxtips-giropops-senhas/)
 
 Para verificar se a imagem possui alguma vulnerabilidade, utilize o [Trivy](https://aquasecurity.github.io/trivy/v0.47/getting-started/installation/)
 
