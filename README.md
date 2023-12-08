@@ -42,6 +42,9 @@ curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/inst
 trivy image raphaelborges/linuxtips-giropops-senhas:1.3
 ```
 
+![Trivy](static/trivy.png)
+
+
 ## Configuração do Cluster
 
 ### Criando o Cluster
@@ -77,8 +80,10 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 
 ```bash
 sudo apt-get install yamllint
-yamllint manifests/
+yamllint manifests/ && echo "No errors found in the YAML file."
 ```
+
+![Yamllint](static/yamllint.png)
 
 4. Crie o Issuer de staging e o ClusterIssuer de produção
 
