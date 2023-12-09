@@ -195,3 +195,13 @@ helm upgrade --install zora undistro/zora \
 ```
 
 4. Após a instalação você pode monitorar o seu cluster através do site do [Zora](https://zora-dashboard.undistro.io/)
+
+TODO:
+
+- [ ] Implementar Terraform para facilitar a utilização
+- [ ] Adicionar mais detalhes do projeto no Readme
+- [ ] Diretrizes para contribuições
+- [ ] Revisar o upload do resultado do Trivy para a aba Security
+- [ ] Assinatura e validação da Image com Cosign direto na Automação com GitHub Actions
+- [ ] Testes de performance
+- [ ] Trabalhar na parte de monitoramento
