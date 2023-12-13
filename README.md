@@ -205,3 +205,4 @@ TODO:
 - [ ] Assinatura e validação da Image com Cosign direto na Automação com GitHub Actions
 - [ ] Testes de performance
 - [ ] Trabalhar na parte de monitoramento
+- [ ] Corrigir o erro 'line too long'

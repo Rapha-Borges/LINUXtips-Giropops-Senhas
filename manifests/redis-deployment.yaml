@@ -17,7 +17,7 @@ spec:
         app: redis
     spec:
       containers:
-        - image: cgr.dev/chainguard/redis:latest
+        - image: cgr.dev/chainguard/redis:latest@sha256:5e036c79c5c64508501a43a9f0915d0dacb4b7018655f89359e3d426bcf64613
           name: redis
           ports:
             - containerPort: 6379
