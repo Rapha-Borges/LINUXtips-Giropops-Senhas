@@ -21,6 +21,7 @@ Este projeto utiliza como base a aplicação [Giropops-Senhas](https://github.co
 - [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
 - [Locust](https://locust.io/)
 - [yamlint](https://yamllint.readthedocs.io/en/stable/index.html)
+- [Digestabot](https://github.com/chainguard-dev/digestabot)
 
 ## Imagem Docker
 
@@ -206,3 +207,4 @@ TODO:
 - [ ] Testes de performance
 - [ ] Trabalhar na parte de monitoramento
 - [ ] Corrigir o erro 'line too long'
+- [ ] Nova versão do Girpopops-Senhas via GitHub Actions
