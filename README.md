@@ -31,7 +31,8 @@ Você pode buildar a imagem utilizando os arquivos na pasta 'giropops-senhas'. D
 
 ```bash
 cd giropops-senhas
-docker build -t raphaelborges/linuxtips-giropops-senhas:1.3 .
+docker build -t raphaelborges/linuxtips-giropops-senhas:{ultima-versao} .
+```
 ```
 
 Porém toda alteração no código fonte da aplicação irá gerar uma nova imagem, que será feito o build e enviada automaticamente para o Docker Hub através do GitHub Actions. A imagem atualizada pode ser encontrada no [Docker Hub](https://hub.docker.com/repository/docker/raphaelborges/linuxtips-giropops-senhas/)
@@ -40,7 +41,7 @@ Para verificar se a imagem possui alguma vulnerabilidade, utilize o [Trivy](http
 
 ```bash
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.47.0
-trivy image raphaelborges/linuxtips-giropops-senhas:1.3
+trivy image raphaelborges/linuxtips-giropops-senhas:{ultima-versao}
 ```
 
 ![Trivy](static/trivy.png)
@@ -117,7 +118,7 @@ sudo chmod +x /usr/local/bin/cosign
 7. Utilize a chave publica disponível no arquivo `key-pair/consign.pub` para verificar a imagem no Docker Hub
 
 ```bash
-cosign verify --key key-pair/cosign.pub raphaelborges/linuxtips-giropops-senhas:1.3
+cosign verify --key key-pair/cosign.pub raphaelborges/linuxtips-giropops-senhas:{ultima-versao}
 ```
 
 8. Instale o Metrics Server
@@ -170,10 +171,14 @@ Adicione as seguintes linhas:
 Acesse o serviço do [Locust](https://locust.giropops.local) e execute o teste de carga. Após alguns minutos, o HPA irá aumentar o número de réplicas do serviço de Senhas. Como estamos utilizando o Kind e o nosso service type é ClusterIP, precisamos acessar o serviço através do IP do cluster. Para isso, execute o comando abaixo:
 
 ```bash
-kubectl get svc -n giropops
+kubectl get svc -n giropops-senhas
 ```
 
-Copie o IP do serviço `giropops-svc` e execute o teste no Locust utilizando este IP.
+Copie o IP do serviço `giropops-svc` e execute o teste no Locust utilizando este IP na porta `5000`.
+
+```
+http://{IP_DO_SERVICO}:5000
+```
 
 ## Implementando o Zora Dashboard
 
@@ -207,4 +212,5 @@ TODO:
 - [ ] Testes de performance
 - [ ] Trabalhar na parte de monitoramento
 - [ ] Corrigir o erro 'line too long'
-- [ ] Nova versão do Girpopops-Senhas via GitHub Actions
+- [x] Nova versão do Girpopops-Senhas via GitHub Actions
+- [ ] Buscar uma forma de utilizar `securityContext` no Redis
