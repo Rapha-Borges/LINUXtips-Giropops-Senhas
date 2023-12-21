@@ -203,7 +203,7 @@ TODO:
 - [ ] Adicionar mais detalhes do projeto no Readme
 - [ ] Diretrizes para contribuições
 - [ ] Revisar o upload do resultado do Trivy para a aba Security
-- [ ] Assinatura e validação da Image com Cosign direto na Automação com GitHub Actions
+- [x] Assinatura e validação da Image com Cosign direto na Automação com GitHub Actions
 - [ ] Testes de performance
 - [ ] Trabalhar na parte de monitoramento
 - [ ] Corrigir o erro 'line too long'
