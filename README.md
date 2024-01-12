@@ -1,13 +1,10 @@
-# Projeto Prático - Programa Intensivo em Containers e Kubernetes
-### Desenvolvimento e Otimização Segura de Aplicações Kubernetes
-
-## Objetivo
+# Projeto Prático Programa Intensivo em Containers e Kubernetes - Desenvolvimento e Otimização Segura de Aplicações Kubernetes
 
 O objetivo deste projeto é criar e implementar uma aplicação em Kubernetes, utilizando as melhores práticas de segurança e otimização.
 
 Este projeto utiliza como base a aplicação [Giropops-Senhas](https://github.com/badtuxx/giropops-senhas).
 
-## Requisitos
+## Tecnologias utilizadas
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)
@@ -22,195 +19,66 @@ Este projeto utiliza como base a aplicação [Giropops-Senhas](https://github.co
 - [Locust](https://locust.io/)
 - [yamlint](https://yamllint.readthedocs.io/en/stable/index.html)
 - [Digestabot](https://github.com/chainguard-dev/digestabot)
+- [Terrafom](https://www.terraform.io)
 
 ## Imagem Docker
 
-A imagem foi construída utilizando como base as imagens [Python da Chainguard](https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/), que já possuem as melhores práticas de segurança implementadas. Utilizando a técnica de [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/) para reduzir o tamanho da imagem final e garantir que a imagem final não possua nenhuma vulnerabilidade.
+![Trivy](static/trivy.png)
 
-Você pode buildar a imagem utilizando os arquivos na pasta 'giropops-senhas'. Dentro dessa estão os arquivos Dockerfile, o requirements.txt e todos os arquivos necessários para a aplicação funcionar.
+A aplicação foi construída utilizando como base as imagens [Python da Chainguard](https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/), que já possuem as melhores práticas de segurança implementadas. Utilizando a técnica de [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/) para reduzir o tamanho final e principalmente aumentar a segurança.
+
+Você pode buildar a imagem localmente utilizando os arquivos na pasta 'giropops-senhas' com o comando:
 
 ```bash
-cd giropops-senhas
-docker build -t raphaelborges/linuxtips-giropops-senhas:{ultima-versao} .
-```
+docker build -t <login-docker-hub>/linuxtips-giropops-senhas:{versao} .
 ```
 
-Porém toda alteração no código fonte da aplicação irá gerar uma nova imagem, que será feito o build e enviada automaticamente para o Docker Hub através do GitHub Actions. A imagem atualizada pode ser encontrada no [Docker Hub](https://hub.docker.com/repository/docker/raphaelborges/linuxtips-giropops-senhas/)
-
-Para verificar se a imagem possui alguma vulnerabilidade, utilize o [Trivy](https://aquasecurity.github.io/trivy/v0.47/getting-started/installation/)
+E rodar testes de segurança utilizando o [Trivy](https://aquasecurity.github.io/trivy/v0.47/getting-started/installation/)
 
 ```bash
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.47.0
-trivy image raphaelborges/linuxtips-giropops-senhas:{ultima-versao}
+trivy image <login-docker-hub>/linuxtips-giropops-senhas:{versao}
 ```
 
-![Trivy](static/trivy.png)
+Ou utilizar a imagem disponível no [Docker Hub](https://hub.docker.com/repository/docker/raphaelborges/linuxtips-giropops-senhas/) com a garantia de utilizar sempre a versão mais recente e livre de vulnerabilidades. Já que a imagem é buildada automaticamente sempre que houver qualquer alterção, utilizando o [Digestabot](https://github.com/chainguard-dev/digestabot) para manter a imagem base sempre atualizada, o [Trivy](https://trivy.dev/) para verificar se a imagem possui alguma vulnerabilidade e o [Cosign](https://docs.sigstore.dev/) para assinar a imagem e garantir que ela não foi alterada.
 
+* Caso tenha interesse em conhecer mais sobre o Digestabot, você pode ler o artigo [Você já conhece o Digestabot?](https://dev.to/raphaborges/voce-ja-conhece-o-digestabot-787) escrito por mim.
 
-## Configuração do Cluster
+## Kubernetes - Técnicas Aplciadas
 
-### Criando o Cluster
+Como o objetivo deste projeto é aplicar as melhores práticas de segurança e otimização, foram utilizadas as seguintes técnicas:
 
-1. Crie o cluster utilizando o [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
+- [x] [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) para armazenar as variáveis de ambiente??
+- [x] [Limites de Recursos](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) para limitar o uso de CPU e Memória
+- [x] [Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/) para limitar o acesso a aplicação
+- [x] [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) para limitar o acesso a aplicação
+- [x] [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) para limitar o acesso a aplicação
+- [x] [Service Account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) para limitar o acesso a aplicação
+- [x] [Pod Disruption Budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/) para garantir que sempre haverá pelo menos um pod rodando ??
+- [x] [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) para escalar a aplicação horizontalmente
+- [x] [Pod Affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) para garantir que os pods rodem no mesmo node
+- [x] [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) para armazenar as configurações da aplicação
+- [x] [Pod Monitor](https://docs.openshift.com/container-platform/4.14/rest_api/monitoring_apis/podmonitor-monitoring-coreos-com-v1.html) Para definir as métricas de monitoramento
+- [x] [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) para garantir que a aplicação seja atualizada sem downtime
+- [x] [Image Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#updating-images) para garantir que a aplicação utilize sempre a imagem mais recente
+- [x] [Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) para definir o usuário e grupo que a aplicação irá rodar
+- [x] [Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) para verificar se a aplicação está saudável
 
-```bash
-kind create cluster --name pick --config manifests/kind/kind-ingress-cluster.yaml
-```
+## Kubernetes - Arquitetura
 
-2. Instalando o [Ingress NGINX Controller no Kind](https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx)
+A aplicação foi dividida nos seguintes componentes:
 
-```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-```
+- [x] [giropops-senhas](giropops-senhas/deployment.yaml) - Responsável por gerar as senhas
+- [x] [redis](redis/deployment.yaml) - Responsável por armazenar as senhas
+- [x] [locust](locust/deployment.yaml) - Responsável por gerar testes de carga na aplicação
+- [x] [ingress-nginx](ingress-nginx/deployment.yaml) - Responsável por gerar o ingress da aplicação
+- [x] [kube-prometheus](kube-prometheus/deployment.yaml) - Responsável por gerar o dashboard de monitoramento
+- [x] [metrics-server](metrics-server/deployment.yaml) - Responsável por gerar métricas de monitoramento
+- [x] [zora-dashboard](zora-dashboard/deployment.yaml) - Responsável por gerar um dashboard de vulnerabilidades
 
-Aguarde a instalação do Ingress NGINX Controller:
+## Deploy
 
-```bash
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=90s
-```
+O deploy da aplicação pode ser feito utilizando de forma local, utilizando o [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/), ou em um cluster na [Oracle Cloud](https://www.oracle.com/br/cloud/).
 
-3. Instalando o Cert-Manager
-
-```bash
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
-```
-
-4. Instale o yamllint e verifique se os manifestos estão corretos
-
-```bash
-sudo apt-get install yamllint
-yamllint manifests/ && echo "No errors found in the YAML file."
-```
-
-![Yamllint](static/yamllint.png)
-
-4. Crie o Issuer de staging e o ClusterIssuer de produção
-
-```bash
-kubectl apply -f manifests/namespace.yaml
-kubectl apply -f manifests/Issuers/staging_issuer.yaml
-kubectl apply -f manifests/Issuers/production_issuer.yaml
-```
-
-5. Instale o [kube-prometheus](https://prometheus-operator.dev/docs/prologue/quick-start/)
-
-```bash
-git clone https://github.com/prometheus-operator/kube-prometheus.git
-cd kube-prometheus
-kubectl create -f manifests/setup
-until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
-kubectl create -f manifests/
-cd ..
-rm -rf kube-prometheus
-```
-
-6. Instale o [Cosign](https://github.com/sigstore/cosign)
-
-```bash
-curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
-sudo mv cosign-linux-amd64 /usr/local/bin/cosign
-sudo chmod +x /usr/local/bin/cosign
-```
-
-7. Utilize a chave publica disponível no arquivo `key-pair/consign.pub` para verificar a imagem no Docker Hub
-
-```bash
-cosign verify --key key-pair/cosign.pub raphaelborges/linuxtips-giropops-senhas:{ultima-versao}
-```
-
-8. Instale o Metrics Server
-
-```bash
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-```
-
-Como estamos utilizando o Kind, precisamos aplicar um patch para que o Metrics Server funcione corretamente. Faremos isso utilizando o kustomize.
-
-```bash
-curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
-sudo mv kustomize /usr/local/bin
-kustomize build manifests/kind/ | kubectl apply -f -
-```
-
-9. Aplique os manifestos presentes na pasta `manifests`
-
-```bash
-kubectl apply -f manifests/
-```
-
-10. Instale o [Zora Dashboard](#implementando-o-zora-dashboard)
-
-11. Para que nossos serviços funcionem localmente, precisamos adicionar algumas entradas no arquivo `/etc/hosts`
-
-```bash
-vim /etc/hosts
-```
-
-Adicione as seguintes linhas:
-
-```bash
-127.0.0.1   prometheus.giropops.local
-127.0.0.1   grafana.giropops.local
-127.0.0.1   alertmanager.giropops.local
-127.0.0.1   giropops.com.local
-```
-
-12. Acesse cada um dos serviços através dos links abaixo:
-
-- [Giropops](https://giropops.com.local)
-- [Prometheus](https://prometheus.giropops.local)
-- [Grafana](https://grafana.giropops.local)
-- [Alertmanager](https://alertmanager.giropops.local)
-- [Locust](https://locust.giropops.local)
-
-13. Testando a aplicação e o HPA
-
-Acesse o serviço do [Locust](https://locust.giropops.local) e execute o teste de carga. Após alguns minutos, o HPA irá aumentar o número de réplicas do serviço de Senhas. Como estamos utilizando o Kind e o nosso service type é ClusterIP, precisamos acessar o serviço através do IP do cluster. Para isso, execute o comando abaixo:
-
-```bash
-kubectl get svc -n giropops-senhas
-```
-
-Copie o IP do serviço `giropops-svc` e execute o teste no Locust utilizando este IP na porta `5000`.
-
-```
-http://{IP_DO_SERVICO}:5000
-```
-
-## Implementando o Zora Dashboard
-
-1. Crie sua conta no site do [Zora](https://zora-dashboard.undistro.io/)
-
-2. Instale o [Helm](https://helm.sh/docs/intro/install/)
-
-3. Copie o comando de instalação do Zora Dashboard, já com o Workspace ID direto da aba 'Connect Cluster' do site do Zora Dashboard
-
-```bash
-helm repo add undistro https://charts.undistro.io --force-update
-helm repo update undistro
-helm upgrade --install zora undistro/zora \
-  -n zora-system \
-  --version 0.7.0 \
-  --create-namespace \
-  --wait \
-  --set clusterName="$(kubectl config current-context)" \
-  --set saas.workspaceID='ef1dd987-cf77-49b5-b2bb-f0419b1ecb4e'
-```
-
-4. Após a instalação você pode monitorar o seu cluster através do site do [Zora](https://zora-dashboard.undistro.io/)
-
-TODO:
-
-- [ ] Implementar Terraform para facilitar a utilização
-- [ ] Adicionar mais detalhes do projeto no Readme
-- [ ] Diretrizes para contribuições
-- [ ] Revisar o upload do resultado do Trivy para a aba Security
-- [x] Assinatura e validação da Image com Cosign direto na Automação com GitHub Actions
-- [ ] Testes de performance
-- [ ] Trabalhar na parte de monitoramento
-- [ ] Corrigir o erro 'line too long'
-- [x] Nova versão do Girpopops-Senhas via GitHub Actions
-- [ ] Buscar uma forma de utilizar `securityContext` no Redis
+- Local - [Kind](kind/README.md)
+- OCI   - [Oracle Cloud](OCI/README.md)
