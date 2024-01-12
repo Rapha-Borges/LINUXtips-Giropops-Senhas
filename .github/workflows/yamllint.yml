@@ -13,9 +13,9 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Validate YAML file
         run: |
-          if yamllint manifests/; then
-            echo "No errors found in the YAML file."
-          else
-            echo "Error(s) found in the YAML file."
-            exit 1
-          fi
+          if yamllint kind/manifests/ && yamllint OCI/manifests/; then
+              echo "No errors found in the YAML file."
+            else
+              echo "Error(s) found in the YAML file."
+              exit 1
+            fi
