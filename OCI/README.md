@@ -39,8 +39,8 @@ kubectl get nodes
 5. Ao finalizar a criação dos recursos, o output mostrará o endereço de IP do Load Balancer que está configurado para expor a nossa aplicação principal. Para acessar as aplicações, como Locust e Prometheus, basta acessar o endereço de IP + a porta do serviço.
 
 ```bash
-<ip>:30000 # Locust
-<ip>:30001 # Prometheus
-<ip>:30002 # Grafana
-<ip>:30003 # AlertManager
+<ip>:3000 # Locust
+<ip>:3001 # Prometheus
+<ip>:3002 # Grafana
+<ip>:3003 # AlertManager
 ```
