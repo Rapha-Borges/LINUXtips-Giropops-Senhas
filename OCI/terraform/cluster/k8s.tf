@@ -2,18 +2,6 @@ data "oci_identity_availability_domains" "ads" {
   compartment_id = var.compartment_id
 }
 
-# data "oci_containerengine_node_pool" "k8s-node-pool" {
-#   node_pool_id = var.node_pool_id
-# }
-
-# locals {
-#   compartment_id = var.compartment_id
-# }
-
-# locals {
-#   active_nodes = [for node in data.oci_containerengine_node_pool.k8s-node-pool.nodes : node if node.state == "ACTIVE"]
-# }
-
 resource "oci_containerengine_cluster" "k8s_cluster" {
   compartment_id     = var.compartment_id
   kubernetes_version = var.k8s_version
