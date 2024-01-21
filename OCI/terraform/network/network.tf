@@ -55,45 +55,6 @@ resource "oci_core_security_list" "public_subnet_sl" {
   }
 
   ingress_security_rules {
-    stateless   = false
-    source      = "189.29.151.1/32"
-    source_type = "CIDR_BLOCK"
-    protocol    = "6"
-    tcp_options {
-      min = 22
-      max = 22
-    }
-  }
-  egress_security_rules {
-    stateless        = false
-    destination      = "0.0.0.0/0"
-    destination_type = "CIDR_BLOCK"
-    protocol         = "all"
-  }
-
-  egress_security_rules {
-    stateless        = false
-    destination      = "10.0.1.0/24"
-    destination_type = "CIDR_BLOCK"
-    protocol         = "6"
-    tcp_options {
-      min = 31600
-      max = 31600
-    }
-  }
-
-  egress_security_rules {
-    stateless        = false
-    destination      = "10.0.1.0/24"
-    destination_type = "CIDR_BLOCK"
-    protocol         = "6"
-    tcp_options {
-      min = 10256
-      max = 10256
-    }
-  }
-
-  ingress_security_rules {
     protocol    = "6"
     source      = "0.0.0.0/0"
     source_type = "CIDR_BLOCK"
@@ -124,7 +85,7 @@ resource "oci_core_security_list" "public_subnet_sl" {
       max = 3010
       min = 3000
     }
-  } 
+  }
 }
 
 resource "oci_core_subnet" "vcn_private_subnet" {
