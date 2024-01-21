@@ -2,12 +2,12 @@
 
 variable "compartment_name" {
   type    = string
-  default = "k8s-arm"
+  default = "pick"
 }
 
 variable "region" {
   type    = string
-  default = "sa-saopaulo-1"  
+  default = "us-ashburn-1"
 }
 
 variable "availability_domain" {
@@ -19,22 +19,22 @@ variable "availability_domain" {
 
 variable "shape" {
   type    = string
-  default = "VM.Standard.A1.Flex"
+  default = "VM.Standard.E3.Flex"
 }
 
 variable "ocpus_per_node" {
   type    = number
-  default = 1
+  default = 4
 }
 
 variable "memory_in_gbs_per_node" {
   type    = number
-  default = 6
+  default = 16
 }
 
 variable "image_id" {
   type    = string
-  default = "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaaeo34cgln3nvq44nmcckxdwzu7xccswpm56koo7ofox7vaphislpa"
+  default = "ocid1.image.oc1.iad.aaaaaaaanwsto6tqklfuawgqrve5ugjpbff3l5qtb7bs35dp72ewcnsuwoka"
 }
 # Link to a list of available images (We are using Oracle-Linux-8.8-aarch64-2023.12.13-0, allways use the ARM version): https://docs.cloud.oracle.com/iaas/images/
 
