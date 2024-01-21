@@ -36,6 +36,3 @@ variable "compartment_id" {
 
 variable "vcn_private_subnet_id" {
 }
-
-# variable "region" {
-# }
