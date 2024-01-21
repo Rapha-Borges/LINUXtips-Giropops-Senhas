@@ -1,3 +1,8 @@
 # Terraform files
 *terraform*
 *.tfplan
+
+# Authentification files
+env.sh
+id_rsa*
+*.pem
