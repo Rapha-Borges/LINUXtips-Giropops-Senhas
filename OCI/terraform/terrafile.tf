@@ -61,6 +61,8 @@ module "giropops-senhas" {
   source                            = "./giropops-senhas"
   depends_on                        = [ module.loadbalancer ]
   cluster_id                        = module.cluster.cluster_id
+  oci_profile                       = var.oci_profile
+  region                            = var.region
 }
 
 output "public_ip" {
