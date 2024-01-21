@@ -24,7 +24,7 @@ oci setup repair-file-permissions --file ~/.oci/oci_api_key.pem
 vim ~/.oci/config
 ```
 
-Caso pretenda personalizar o nome do profile, você pode alterar o `DEFAULT` para o nome que desejar.
+Você pode personalizar o nome do profile alterando o valor [DEFAULT] para o nome desejado. (Leia o passo 3 antes de alterar o nome do profile)
 
 ```
 [DEFAULT]
@@ -59,7 +59,6 @@ Agora rode o script para exportar as variáveis:
 ```
 source export_variables.sh
 ```
-
 
 3. Aplicar os arquivos na pasta `terraform`.
 
