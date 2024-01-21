@@ -73,8 +73,29 @@ variable "load_balancer_name_space" {
   default = "loadbalancer"
 }
 
-# ----------> SSH <----------
+# ----------> Authentication <----------
 
 variable "ssh_public_key" {
   type    = string
+}
+
+variable "fingerprint" {
+  type    = string
+}
+
+variable "private_key_path" {
+  type    = string
+}
+
+variable "tenancy_ocid" {
+  type    = string
+}
+
+variable "user_ocid" {
+  type    = string
+}
+
+variable "oci_profile" {
+  type    = string
+  default = "PICK"
 }
