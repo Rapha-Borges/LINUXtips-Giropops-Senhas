@@ -97,5 +97,5 @@ variable "user_ocid" {
 
 variable "oci_profile" {
   type    = string
-  default = "PICK"
+  default = "DEFAULT"
 }
