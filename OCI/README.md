@@ -109,7 +109,16 @@ kubectl get nodes
 <ip>:3003 # AlertManager
 ```
 
+# Removendo os recursos
+
+Para remover os recursos criados, basta executar o comando abaixo:
+
+```bash
+tofu destroy
+```
+
 
 ## TODO
 
 - [ ] Corrigir erro do `tofu apply` quando o profile é diferente de `DEFAULT`.
+- [ ] Verificar possibilidade do recurso `kubernetes_namespace` executar somente no contexto correto.
