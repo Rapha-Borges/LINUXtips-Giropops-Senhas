@@ -12,7 +12,7 @@ variable "region" {
 
 variable "availability_domain" {
   type    = number
-  default = 0
+  default = 2
 }
 
 # ---------->VM's----------
@@ -24,12 +24,12 @@ variable "shape" {
 
 variable "ocpus_per_node" {
   type    = number
-  default = 4
+  default = 2
 }
 
 variable "memory_in_gbs_per_node" {
   type    = number
-  default = 16
+  default = 4
 }
 
 variable "image_id" {
@@ -46,7 +46,7 @@ variable "k8s_version" {
 
 variable "node_size" {
   type    = string
-  default = "3"
+  default = "4"
 }
 
 variable "cluster_name" {
@@ -73,6 +73,26 @@ variable "load_balancer_name_space" {
   default = "loadbalancer"
 }
 
+variable "node_port_http" {
+  type    = number
+  default = 30080
+}
+
+variable "node_port_https" {
+  type    = number
+  default = 30443
+}
+
+variable "listener_port_http" {
+  type    = number
+  default = 80
+}
+
+variable "listener_port_https" {
+  type    = number
+  default = 443
+}
+
 # ----------> Authentication <----------
 
 variable "ssh_public_key" {
@@ -97,5 +117,4 @@ variable "user_ocid" {
 
 variable "oci_profile" {
   type    = string
-  default = "DEFAULT"
 }

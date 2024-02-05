@@ -51,19 +51,31 @@ module "cluster" {
 module "loadbalancer" {
   source                            = "./loadbalancer"
   depends_on                        = [ module.cluster, module.network, module.compartment, module.vcn ]
+  namespace                         = var.load_balancer_name_space
   node_pool_id                      = module.cluster.node_pool_id
   compartment_id                    = module.compartment.compartment_id
   public_subnet_id                  = module.network.public_subnet_id
   node_size                         = var.node_size
+  node_port_http                    = var.node_port_http
+  node_port_https                   = var.node_port_https
+  listener_port_http                = var.listener_port_http
+  listener_port_https               = var.listener_port_https
 }
 
-module "giropops-senhas" {
-  source                            = "./giropops-senhas"
+module "kubeconfig" {
+  source                            = "./kubeconfig"
   depends_on                        = [ module.loadbalancer ]
   cluster_id                        = module.cluster.cluster_id
   oci_profile                       = var.oci_profile
-  region                            = var.region
 }
+
+# module "giropops-senhas" {
+#   source                            = "./giropops-senhas"
+#   depends_on                        = [ module.loadbalancer ]
+#   cluster_id                        = module.cluster.cluster_id
+#   oci_profile                       = var.oci_profile
+#   region                            = var.region
+# }
 
 output "public_ip" {
   value = module.loadbalancer.load_balancer_public_ip

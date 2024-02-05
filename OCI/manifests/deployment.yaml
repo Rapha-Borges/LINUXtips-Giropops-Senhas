@@ -1,0 +1,179 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: giropops-senhas
+  name: giropops-deployment
+  namespace: giropops-senhas
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: giropops-senhas
+  template:
+    metadata:
+      labels:
+        app: giropops-senhas
+    spec:
+      containers:
+        - image: raphaelborges/teste-linuxtips-giropops-senhas:0.46
+          name: giropops-senhas
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              cpu: '0.1'
+              memory: 128Mi
+            requests:
+              cpu: '0.1'
+              memory: 128Mi
+          imagePullPolicy: Always
+          env:
+            - name: REDIS_HOST
+              value: redis-service
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            # runAsUser: 1000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: locust-giropops
+  name: locust-giropops
+  namespace: giropops-senhas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-giropops
+  template:
+    metadata:
+      labels:
+        app: locust-giropops
+    spec:
+      containers:
+        - image: raphaelborges/locust-giropops:1.3-rc1
+          name: locust-giropops
+          env:
+            - name: LOCUST_LOCUSTFILE
+              value: "/usr/src/app/scripts/locustfile.py"
+          resources:
+            limits:
+              cpu: '0.1'
+              memory: 128Mi
+            requests:
+              cpu: '0.1'
+              memory: 128Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          ports:
+            - containerPort: 8089
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: locust-scripts
+              mountPath: /usr/src/app/scripts
+      volumes:
+        - name: locust-scripts
+          configMap:
+            name: locust-scripts
+            optional: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx-deployment
+  namespace: giropops-senhas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:1.14.2
+        name: nginx
+        resources:
+          limits:
+            cpu: '0.1'
+            memory: 128Mi
+          requests:
+            cpu: '0.1'
+            memory: 128Mi
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: nginx-config
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+  namespace: giropops-senhas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - image: cgr.dev/chainguard/redis:latest@sha256:5e036c79c5c64508501a43a9f0915d0dacb4b7018655f89359e3d426bcf64613
+          name: redis
+          ports:
+            - containerPort: 6379
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "0.1"
+              memory: 128Mi
+            requests:
+              cpu: "0.1"
+              memory: 128Mi
+          # securityContext:
+          #   readOnlyRootFilesystem: true
+          #   runAsNonRoot: true
+          #   runAsUser: 1000

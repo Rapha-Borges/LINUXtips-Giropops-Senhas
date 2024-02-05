@@ -1,0 +1,131 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: giropops-cert
+  namespace: giropops-senhas
+spec:
+  secretName: giropops-tls
+  issuerRef:
+    name: letsencrypt-prod
+    # name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+  - giropops.r11s.com.br
+  - nginx.r11s.com.br
+  - locust.r11s.com.br
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: monitoring-cert
+  namespace: monitoring
+spec:
+  secretName: monitoring-tls
+  issuerRef:
+    name: letsencrypt-prod
+    # name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - alertmanager.r11s.com.br
+    - grafana.r11s.com.br
+    - prometheus.r11s.com.br
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: giropops-senhas-ingress
+  namespace: giropops-senhas
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "giropops-cookie"
+    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: giropops.r11s.com.br
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: giropops-svc
+            port:
+              number: 80
+  - host: nginx.r11s.com.br
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 80
+  - host: locust.r11s.com.br
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: locust-svc
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - giropops.r11s.com.br
+    - nginx.r11s.com.br
+    - locust.r11s.com.br
+    secretName: giropops-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-ingress
+  namespace: monitoring
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: alertmanager.r11s.com.br
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: alertmanager-svc
+            port:
+              number: 80
+  - host: grafana.r11s.com.br
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana-svc
+            port:
+              number: 80
+  - host: prometheus.r11s.com.br
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-svc
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - alertmanager.r11s.com.br
+    - grafana.r11s.com.br
+    - prometheus.r11s.com.br
+    secretName: monitoring-tls

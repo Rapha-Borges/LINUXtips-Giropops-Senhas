@@ -75,17 +75,6 @@ resource "oci_core_security_list" "public_subnet_sl" {
       min = 443
     }
   }
-
-  ingress_security_rules {
-    protocol    = "6"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = false
-    tcp_options {
-      max = 3010
-      min = 3000
-    }
-  }
 }
 
 resource "oci_core_subnet" "vcn_private_subnet" {
