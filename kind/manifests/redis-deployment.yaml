@@ -29,7 +29,7 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-          # securityContext:
-          #   readOnlyRootFilesystem: true
-          #   runAsNonRoot: true
-          #   runAsUser: 1000
+        # securityContext:
+        #   readOnlyRootFilesystem: true
+        #   runAsNonRoot: true
+        #   runAsUser: 1000
