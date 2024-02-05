@@ -123,25 +123,25 @@ spec:
         app: nginx
     spec:
       containers:
-      - image: nginx:1.14.2
-        name: nginx
-        resources:
-          limits:
-            cpu: '0.1'
-            memory: 128Mi
-          requests:
-            cpu: '0.1'
-            memory: 128Mi
-        ports:
-        - containerPort: 80
-        volumeMounts:
-          - name: nginx-config
-            mountPath: /etc/nginx/nginx.conf
-            subPath: nginx.conf
+        - image: nginx:1.14.2
+          name: nginx
+          resources:
+            limits:
+              cpu: '0.1'
+              memory: 128Mi
+            requests:
+              cpu: '0.1'
+              memory: 128Mi
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
       volumes:
-      - name: nginx-config
-        configMap:
-          name: nginx-config
+        - name: nginx-config
+          configMap:
+            name: nginx-config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -173,7 +173,7 @@ spec:
             requests:
               cpu: "0.1"
               memory: 128Mi
-        # securityContext:
-        #   readOnlyRootFilesystem: true
-        #   runAsNonRoot: true
-        #   runAsUser: 1000
+      #  securityContext:
+      #    readOnlyRootFilesystem: true
+      #    runAsNonRoot: true
+      #    runAsUser: 1000

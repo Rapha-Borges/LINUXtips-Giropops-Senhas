@@ -137,4 +137,3 @@ spec:
       targetPort: 9090
       name: tcp-app
   type: NodePort
-  
