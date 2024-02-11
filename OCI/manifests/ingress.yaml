@@ -64,7 +64,7 @@ spec:
               service:
                 name: nginx-service
                 port:
-                number: 80
+                  number: 80
     - host: locust.r11s.com.br
       http:
         paths:
