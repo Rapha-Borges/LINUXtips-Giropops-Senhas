@@ -10,7 +10,7 @@ spec:
     kind: Deployment
     name: giropops-deployment
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 15
   metrics:
     - type: Resource
       resource:
@@ -18,3 +18,29 @@ spec:
         target:
           type: Utilization
           averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: ContainerResource
+      containerResource:
+        name: cpu
+        container: giropops-senhas
+        target:
+          type: Utilization
+          averageUtilization: 50
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 100
+          periodSeconds: 15
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Pods
+          value: 100
+          periodSeconds: 15
