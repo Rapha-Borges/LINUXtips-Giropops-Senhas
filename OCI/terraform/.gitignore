@@ -7,5 +7,5 @@ env.sh
 id_rsa*
 *.pem
 
-# Unused files
-refresh_token_script*
+# Files
+install.md
