@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-label
+  namespace: giropops-senhas
+spec:
+  background: false
+  rules:
+  - name: add-label-giropops
+    match:
+      resources:
+        kinds:
+        - "*"
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+            projeto: "pick"
