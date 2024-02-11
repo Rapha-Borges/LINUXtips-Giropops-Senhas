@@ -1,4 +1,4 @@
-# Fazendo deploy do projeto no OKE (Oracle Kubernetes Engine)
+# Deploy do Cluster Kubernetes na Oracle Cloud Infrastructure
 
 1. Crie uma `API key`
 
@@ -41,7 +41,7 @@ key_file=~/.oci/oci_api_key.pem
 ssh-keygen -t rsa -b 4096 -f ssh/id_rsa
 ```
 
-7. Adicione os valores ao arquivo `export_variables.sh`, para exportar todas as variáveis necessárias para a autenticação do terraform.
+7. Adicione os valores ao arquivo `env.sh`, para exportar todas as variáveis necessárias para a autenticação do terraform.
 
 ```
 export TF_VAR_tenancy_ocid=<your tenancy ocid>
@@ -57,7 +57,7 @@ export TF_VAR_oci_profile="DEFAULT"
 Agora rode o script para exportar as variáveis:
 
 ```
-source export_variables.sh
+source env.sh
 ```
 
 3. Aplicar os arquivos na pasta `terraform`.
@@ -67,7 +67,7 @@ tofu init
 tofu apply
 ```
 
-* Caso você tenha utilizado um profile diferente de `DEFAULT`, ocorrerá um erro ao final do processo de criação dos recursos. Para corrigir, basta adicionar o profile no arquivo `~/.kube/config` e executar o comando `tofu apply` novamente.
+* Caso você tenha utilizado um profile diferente de `DEFAULT`, basta adicionar o profile no arquivo `~/.kube/config`.
 
 ```
 vim ~/.kube/config
@@ -100,25 +100,105 @@ users:
 kubectl get nodes
 ```
 
-5. Ao finalizar a criação dos recursos, o output mostrará o endereço de IP do Load Balancer que está configurado para expor a nossa aplicação principal. Para acessar as aplicações, como Locust e Prometheus, basta acessar o endereço de IP + a porta do serviço.
+# Deploy da aplicação
+
+1. Criando os namespaces:
 
 ```bash
-<ip>:3000 # Locust
-<ip>:3001 # Prometheus
-<ip>:3002 # Grafana
-<ip>:3003 # AlertManager
+kubectl apply -f manifests/namespace.yaml
+```
+
+2. Instalando o Ingress Nginx Controller:
+
+```bash
+helm upgrade --install ingress-nginx ingress-nginx \
+        --repo https://kubernetes.github.io/ingress-nginx \
+        --namespace ingress-nginx \
+        --set controller.service.annotations."oci\.oraclecloud\.com/load-balancer-type"="nlb" \
+        --set controller.service.annotations."oci-network-load-balancer\.oraclecloud\.com/security-list-management-mode"="All" \
+        --set controller.service.type="NodePort" \
+        --set controller.service.nodePorts.http=30080 \
+        --set controller.service.nodePorts.https=30443
+```
+
+Utilize o comando abaixo para garantir que o Ingress Nginx Controller foi instalado corretamente antes de prosseguir.
+
+```bash
+kubectl wait --namespace ingress-nginx \
+        --for=condition=ready pod \
+        --selector=app.kubernetes.io/component=controller \
+        --timeout=90s
+```
+
+3. Instale o Cert-Manager:
+
+```bash
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.1/cert-manager.yaml
+```
+
+4. Agora vamos criar a `Issuer` e a `ClusterIssuer` que serão utilizadas para gerar os certificados SSL.
+
+```bash
+kubectl apply -f manifests/Issuers/Issuers.yaml
+```
+
+5. Instale o Prometheus, Grafana, AlertManager utilizando o kube-prometheus:
+
+```bash
+git clone https://github.com/prometheus-operator/kube-prometheus.git && cd kube-prometheus && kubectl create -f manifests/setup && until kubectl get servicemonitors --all-namespaces; do date; sleep 1; echo ''; done && kubectl create -f manifests/ && cd .. && rm -rf kube-prometheus
+```
+
+6. Instale o Metrics Server que será utilizado pelo HPA (Horizontal Pod Autoscaler):
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+7. Com o ambiente pronto, podemos fazer o deploy das aplicações:
+
+```bash
+kubectl apply -f manifests/
+```
+
+8. Após o deploy, precisamos configurar o nosso domínio para apontar para o IP do NLB (Network Load Balancer). Você pode encontrar o IP do NLB no console da Oracle Cloud Infrastructure ou executando o comando abaixo `tofu output` no diretório `terraform`.
+
+```bash
+tofu output
+```
+
+9. Com o IP do NLB em mãos, crie um registro A no seu domínio apontando para o IP do NLB.
+
+10. Podemos acessar cada uma das aplicações através dos endereços abaixo:
+
+```bash
+https://giropops.r11s.com.br # Aplicação principal
+https://locust.r11s.com.br # Locust
+https://prometheus.r11s.com.br # Prometheus
+https://grafana.r11s.com.br # Grafana
+https://alertmanager.r11s.com.br # AlertManager
 ```
 
 # Removendo os recursos
 
-Para remover os recursos criados, basta executar o comando abaixo:
+Para remover a aplicação:
+
+```bash
+kubectl delete -f manifests/ && kubectl delete -f manifests/Issuers/
+git clone https://github.com/prometheus-operator/kube-prometheus.git && cd kube-prometheus && kubectl delete -f manifests/ && kubectl delete -f manifests/setup
+cd .. && rm -rf kube-prometheus
+kubectl delete -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.1/cert-manager.yaml
+kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl delete secrets letsencrypt-staging letsencrypt-prod
+```
+
+Removendo o Ingress Nginx Controller:
+
+```bash
+helm uninstall ingress-nginx -n ingress-nginx
+```
+
+Para remover o cluster e todos os recursos criados:
 
 ```bash
 tofu destroy
 ```
-
-
-## TODO
-
-- [ ] Corrigir erro do `tofu apply` quando o profile é diferente de `DEFAULT`.
-- [ ] Verificar possibilidade do recurso `kubernetes_namespace` executar somente no contexto correto.
