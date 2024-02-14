@@ -7,19 +7,26 @@ Este projeto utiliza como base a aplicação [Giropops-Senhas](https://github.co
 ## Tecnologias utilizadas
 
 - [Docker](https://docs.docker.com/get-docker/)
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Kubernetes](https://kubernetes.io/docs/home/)
 - [Helm](https://helm.sh/docs/intro/install/)
-- [kube-prometheus](https://prometheus-operator.dev/docs/prologue/quick-start/)
+- [Prometheus](https://prometheus.io/docs/prometheus/latest/installation/)
+- [Grafana](https://grafana.com/docs/grafana/latest/installation/)
+- [Metrics Server](https://github.com/kubernetes-sigs/metrics-server)
+- [Cert-Manager](https://cert-manager.io/docs/installation/kubernetes/)
+- [Ingress NGINX Controller](https://kubernetes.github.io/ingress-nginx/deploy/)
+- [Kyverno](https://kyverno.io/)
 - [Cosign](https://github.com/sigstore/cosign)
 - [Trivy](https://aquasecurity.github.io/trivy/v0.47/getting-started/installation/)
-- [Zora Dashboard](https://zora-dashboard.undistro.io/)
-- [Ingress NGINX Controller](https://kubernetes.github.io/ingress-nginx/deploy/)
-- [Cert-Manager](https://cert-manager.io/docs/installation/kubernetes/)
-- [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
-- [Locust](https://locust.io/)
 - [yamlint](https://yamllint.readthedocs.io/en/stable/index.html)
 - [Digestabot](https://github.com/chainguard-dev/digestabot)
+- [Zora Dashboard](https://zora-dashboard.undistro.io/)
+- [Locust](https://locust.io/)
 - [Terrafom](https://www.terraform.io)
+- [OpenTofu](https://opentofu.org/)
+- [OCI](https://www.oracle.com/br/cloud/)
+- [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
+
+
 
 ## Imagem Docker
 
@@ -42,7 +49,7 @@ trivy image <login-docker-hub>/linuxtips-giropops-senhas:{versao}
 
 Ou utilizar a imagem disponível no [Docker Hub](https://hub.docker.com/repository/docker/raphaelborges/linuxtips-giropops-senhas/) com a garantia de utilizar sempre a versão mais recente e livre de vulnerabilidades. Já que a imagem é buildada automaticamente sempre que houver qualquer alterção, utilizando o [Digestabot](https://github.com/chainguard-dev/digestabot) para manter a imagem base sempre atualizada, o [Trivy](https://trivy.dev/) para verificar se a imagem possui alguma vulnerabilidade e o [Cosign](https://docs.sigstore.dev/) para assinar a imagem e garantir que ela não foi alterada.
 
-* Caso tenha interesse em conhecer mais sobre o Digestabot, você pode ler o artigo [Você já conhece o Digestabot?](https://dev.to/raphaborges/voce-ja-conhece-o-digestabot-787) escrito por mim.
+* Caso tenha interesse em conhecer mais sobre o Digestabot, você pode ler o meu artigo [Você já conhece o Digestabot?](https://dev.to/raphaborges/voce-ja-conhece-o-digestabot-787).
 
 ## Kubernetes - Técnicas Aplciadas
 
@@ -63,6 +70,7 @@ Como o objetivo deste projeto é aplicar as melhores práticas de segurança e o
 - [x] [Image Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#updating-images) para garantir que a aplicação utilize sempre a imagem mais recente
 - [x] [Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) para definir o usuário e grupo que a aplicação irá rodar
 - [x] [Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) para verificar se a aplicação está saudável
+- [x] [Policy](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) para garantir que a aplicação utilize sempre a imagem mais recente
 
 ## Kubernetes - Arquitetura
 
@@ -78,7 +86,7 @@ A aplicação foi dividida nos seguintes componentes:
 
 ## Deploy
 
-O deploy da aplicação pode ser feito utilizando de forma local, utilizando o [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/), ou em um cluster na [Oracle Cloud](https://www.oracle.com/br/cloud/).
+O deploy da aplicação pode ser feito de forma local, utilizando o [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/), ou em um cluster na [Oracle Cloud](https://www.oracle.com/br/cloud/) utilizando outro projeto que desenvolvi como base, o [OKE-FREE](https://github.com/rapha-Borges/oke-free)
 
 - Local - [Kind](kind/README.md)
 - OCI   - [Oracle Cloud](OCI/README.md)
