@@ -12,10 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Validate YAML file
-        run: |
-          if yamllint -c '.github/workflows/config.yamllint' kind/manifests/ && yamllint OCI/manifests/; then
-              echo "No errors found in the YAML file."
-            else
-              echo "Error(s) found in the YAML file."
-              exit 1
-            fi
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: kind/manifests/**.yaml OCI/manifests/**.yaml
+          config_file: '.github/workflows/config.yamllint'
