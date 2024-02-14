@@ -1,3 +1,4 @@
+---
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -6,13 +7,13 @@ metadata:
 spec:
   background: false
   rules:
-  - name: add-label-giropops
-    match:
-      resources:
-        kinds:
-        - "*"
-    mutate:
-      patchStrategicMerge:
-        metadata:
-          labels:
-            projeto: "pick"
+    - name: add-label-giropops
+      match:
+        resources:
+          kinds:
+            - "*"
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            labels:
+              projeto: "pick"
