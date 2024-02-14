@@ -21,17 +21,17 @@ spec:
         app: giropops-senhas
     spec:
       containers:
-        - image: raphaelborges/teste-linuxtips-giropops-senhas:0.46
+        - image: raphaelborges/linuxtips-giropops-senhas:latest@sha256:8196ec58facd49cee0a0d4cbcab5f4cba5b31b480be03fe30f68697a8cb6cada
           name: giropops-senhas
           ports:
             - containerPort: 5000
           resources:
             limits:
               cpu: '0.1'
-              memory: 128Mi
+              memory: 256Mi
             requests:
               cpu: '0.1'
-              memory: 128Mi
+              memory: 256Mi
           imagePullPolicy: Always
           env:
             - name: REDIS_HOST
