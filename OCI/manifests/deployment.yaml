@@ -21,7 +21,7 @@ spec:
         app: giropops-senhas
     spec:
       containers:
-        - image: raphaelborges/linuxtips-giropops-senhas:latest@sha256:591f8475f96a975e143dccf0772729d5bcb772237fca68c7c4d2deb5a8f9837f
+        - image: raphaelborges/linuxtips-giropops-senhas:latest@sha256:c8b21ff2e0c5ba9f5709e83340087fd698c0245c92912a8281e080ea57cf46ce
           name: giropops-senhas
           ports:
             - containerPort: 5000
