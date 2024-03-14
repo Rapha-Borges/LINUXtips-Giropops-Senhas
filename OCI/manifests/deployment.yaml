@@ -21,7 +21,7 @@ spec:
         app: giropops-senhas
     spec:
       containers:
-        - image: raphaelborges/linuxtips-giropops-senhas:latest@sha256:c8b21ff2e0c5ba9f5709e83340087fd698c0245c92912a8281e080ea57cf46ce
+        - image: raphaelborges/linuxtips-giropops-senhas:latest@sha256:0983e8fe2cfd0296d0587f0d9f4dc51444bd97a9dca8210a42d33480628f264a
           name: giropops-senhas
           ports:
             - containerPort: 5000
@@ -161,7 +161,7 @@ spec:
         app: redis
     spec:
       containers:
-        - image: cgr.dev/chainguard/redis:latest@sha256:5a351b571f86b7ee69aa1cb7a4f6761aaa19ed3728e6b72fe5d89895123541d8
+        - image: cgr.dev/chainguard/redis:latest@sha256:17c62b30dfe7199c0f47df684a43621e227f394a4a2dd2ea6f7b0afce61e0bd9
           name: redis
           ports:
             - containerPort: 6379
