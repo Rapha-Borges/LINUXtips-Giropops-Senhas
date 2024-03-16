@@ -90,3 +90,5 @@ O deploy da aplicação pode ser feito de forma local, utilizando o [Kind](https
 
 - Local - [Kind](kind/README.md)
 - OCI   - [Oracle Cloud](OCI/README.md)
+
+## Desenvolvido por [@Raphael Borges](https://r11s.com.br/)
