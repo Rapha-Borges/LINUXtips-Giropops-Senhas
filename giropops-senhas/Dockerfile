@@ -1,9 +1,9 @@
-FROM cgr.dev/chainguard/python:latest-dev@sha256:536ef35b39718bedfe7794109507062bc222653b2b2ea8eb8eff94f144821871 as builder
+FROM cgr.dev/chainguard/python:latest-dev@sha256:c26229dc2d26473042e47e337ee93bdcb09d0ad8184f681ced37d5d246f7f556 as builder
 WORKDIR /app
 COPY . /app
 RUN pip install -r requirements.txt --user
 
-FROM cgr.dev/chainguard/python:latest@sha256:a66df8b987e2cd6ce3e7e6f133fac56ee53467ca685b8b013ac2cb462410128c
+FROM cgr.dev/chainguard/python:latest@sha256:0492ec3eb9f43757c3a5d42198ea85fb61757700cd98436577a1924ec9d11c4e
 WORKDIR /app
 COPY --from=builder /home/nonroot/.local/lib/python3.12/site-packages /home/nonroot/.local/lib/python3.12/site-packages
 COPY --from=builder /app /app
